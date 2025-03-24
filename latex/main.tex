@@ -1,0 +1,158 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\begin{document}
+
+\section{Préparation}
+
+\subsection{Calcul du gradient \(\nabla f(x,y)\)}
+
+La fonction de Rosenbrock considérée est
+\[
+    f(x,y) \;=\; (1 - x)^2 \;+\; a^2\,(x - y^2)^2.
+\]
+Pour tout \((x,y)\in\mathbb{R}^2\), on calcule les dérivées partielles :
+\[
+\frac{\partial f}{\partial x}(x,y) 
+= -2\,(1 - x) \;+\; 2\,a^2\,(x - y^2),
+\qquad
+\frac{\partial f}{\partial y}(x,y) 
+= -4\,a^2\,y\,(x - y^2).
+\]
+Le gradient est donc
+\[
+    \nabla f(x,y) 
+    = 
+    \begin{pmatrix}
+    -2\,(1 - x) + 2\,a^2\,(x - y^2) \\[6pt]
+    -4\,a^2\,y\,(x - y^2)
+    \end{pmatrix}.
+\]
+
+\subsection{Points critiques : résolution de \(\nabla f(x,y) = 0\)}
+
+Le système \(\nabla f(x,y) = 0\) s’écrit :
+\[
+    \begin{cases}
+      -2\,(1 - x) + 2\,a^2\,(x - y^2) = 0,\\[4pt]
+      -4\,a^2\,y\,(x - y^2) = 0.
+    \end{cases}
+\]
+\begin{itemize}
+\item \textbf{Cas 1 : \(y = 0\).}  
+  De la première équation, on obtient :
+  \[
+    -2\,(1 - x) + 2\,a^2\,x = 0 
+    \quad\Longrightarrow\quad
+    x\,(1 + a^2) = 1
+    \quad\Longrightarrow\quad
+    x = \frac{1}{1 + a^2}.
+  \]
+  D’où le point critique
+  \(\displaystyle
+    a_1 = \Bigl(\tfrac{1}{1 + a^2},\,0\Bigr).
+  \)
+
+\item \textbf{Cas 2 : \(x - y^2 = 0\).}  
+  Ici, \(x = y^2\). On remplace dans la première équation :
+  \[
+    -2\,(1 - y^2) + 2\,a^2\,(y^2 - y^2) 
+    = -2\,(1 - y^2) = 0
+    \quad\Longrightarrow\quad
+    y^2 = 1.
+  \]
+  Donc \(y = \pm 1\) et \(x = 1\). On obtient deux autres points critiques :
+  \(\displaystyle
+    a_2 = (1,\,1), 
+    \quad
+    a_3 = (1,\,-1).
+  \)
+\end{itemize}
+
+\subsection{Matrice Hessienne \(\mathrm{Hess}_f(x,y)\)}
+
+En dérivant une seconde fois :
+\[
+    \nabla f(x,y) 
+    = 
+    \begin{pmatrix}
+    -2\,(1 - x) + 2\,a^2\,(x - y^2) \\
+    -4\,a^2\,y\,(x - y^2)
+    \end{pmatrix}.
+\]
+on trouve :
+\[
+  \frac{\partial^2 f}{\partial x^2} 
+  = 2\,(1 + a^2),
+  \qquad
+  \frac{\partial^2 f}{\partial x \partial y} 
+  = \frac{\partial^2 f}{\partial y \partial x} 
+  = -4\,a^2\,y,
+  \qquad
+  \frac{\partial^2 f}{\partial y^2} 
+  = -4\,a^2\,x + 12\,a^2\,y^2.
+\]
+Ainsi,
+\[
+\mathrm{Hess}_f(x,y)
+  = 
+  \begin{pmatrix}
+    2\,(1 + a^2) & -4\,a^2\,y \\[6pt]
+    -4\,a^2\,y   & -4\,a^2\,x + 12\,a^2\,y^2
+  \end{pmatrix}.
+\]
+
+\subsection{Nature des points critiques \((a_1,a_2,a_3)\)}
+
+Pour chaque point, on évalue \(\mathrm{Hess}_f\) :
+
+\begin{itemize}
+\item
+  \(\displaystyle a_1 
+    = \Bigl(\tfrac{1}{1 + a^2},\,0\Bigr)\).
+  La hessienne devient alors diagonale avec 
+  \(2\,(1 + a^2)\) et \(\displaystyle -4\,a^2\,\Bigl(\tfrac{1}{1 + a^2}\Bigr)\) 
+  sur la diagonale, donc l’une est positive et l’autre négative.
+  \(\mathrm{Hess}_f(a_1)\) est par conséquent indéfinie :
+  \(a_1\) est un \textbf{point selle}.
+\item
+  \(\displaystyle a_2 = (1,\,1)\).
+  Dans ce cas,
+  \[
+    \mathrm{Hess}_f(a_2)
+    = 
+    \begin{pmatrix}
+      2\,(1 + a^2) & -4\,a^2 \\
+      -4\,a^2      & 8\,a^2
+    \end{pmatrix}.
+  \]
+  Le déterminant est strictement positif et la trace est positive ; les valeurs propres sont toutes positives :
+  \(a_2\) est donc un \textbf{minimum local}.
+\item
+  \(\displaystyle a_3 = (1,\,-1)\).
+  On obtient de même
+  \[
+    \mathrm{Hess}_f(a_3)
+    = 
+    \begin{pmatrix}
+      2\,(1 + a^2) & 4\,a^2 \\
+      4\,a^2       & 8\,a^2
+    \end{pmatrix},
+  \]
+  dont le déterminant et la trace sont aussi positifs : on a deux valeurs propres positives ;
+  \(a_3\) est un \textbf{minimum local}.
+\end{itemize}
+
+Par ailleurs, on vérifie que \(f(a_2) = f(a_3) = 0\), correspondant à la valeur minimale (globale) de la fonction.
+
+\subsubsection*{Conclusion}
+
+On a donc identifié trois points critiques : 
+\[
+  a_1 = \Bigl(\tfrac{1}{\,1+a^2\,},\,0\Bigr)\quad(\text{point selle}),\quad
+  a_2 = (1,1),\quad
+  a_3 = (1,-1)\quad(\text{minima}).
+\]
+\end{document}
